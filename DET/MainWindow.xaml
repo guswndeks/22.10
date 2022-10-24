@@ -1,0 +1,313 @@
+﻿<Window xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"  
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DET"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Class="DET.MainWindow"
+        mc:Ignorable="d"
+        Title="Chart_DataGrid" Height="600" Width="1000" >
+
+    <Grid ShowGridLines="False">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+
+
+        <Button x:Name ="Close" Grid.Column="2" Grid.Row="0"  Background="Gray" BorderBrush="Transparent" >
+            <Image x:Name="climg" Source="/Resources/btn_X_close.png" Stretch="None"/>
+        </Button>
+        <!--차트영역-->
+        <Button x:Name ="btnchartdata" Grid.Column="1" Grid.Row="1" Content="DevTest Open" Width="100" HorizontalAlignment="Right" Click="btnchartdata_Click_1"/>
+        <Border Grid.Row="2" Grid.Column="1">
+            <dxc:ChartControl Name="CC">
+                <dxc:ChartControl.Legend>
+                    <dxc:Legend  HorizontalPosition="LeftOutside" VerticalPosition="Center" MarkerMode="CheckBoxAndMarker"/>
+                </dxc:ChartControl.Legend>
+
+                <dxc:ChartControl.CrosshairOptions>
+                    <dxc:CrosshairOptions GroupHeaderPattern="{}{A:yyyy-MM-dd HH:mm}">
+                    </dxc:CrosshairOptions>
+                </dxc:ChartControl.CrosshairOptions>
+
+                <dxc:ChartControl.Diagram>
+
+                    <dxc:XYDiagram2D EnableAxisXNavigation="True" EnableAxisYNavigation="True">                        
+
+                        <dxc:XYDiagram2D.AxisX>
+                            <dxc:AxisX2D x:Name="axisXtm" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                                <dxc:AxisX2D.DateTimeScaleOptions>
+                                    <dxc:ManualDateTimeScaleOptions AggregateFunction="Maximum" AutoGrid="True"
+                                                            GridAlignment="Hour" MeasureUnit="Minute" 
+                                                            GridSpacing="1" GridOffset="1"/>
+                                </dxc:AxisX2D.DateTimeScaleOptions>
+                                   
+
+                                <dxc:AxisX2D.Label>
+                                    <dxc:AxisLabel TextPattern="{}{A:yyyy-MM-dd HH:mm}"/> 
+                                </dxc:AxisX2D.Label>
+                            </dxc:AxisX2D>
+
+                        </dxc:XYDiagram2D.AxisX>
+
+                        <dxc:XYDiagram2D.AxisY>
+                            <dxc:AxisY2D x:Name="axisYfl">
+                                <dxc:AxisY2D.VisualRange>
+                                    <dxc:Range />
+                                </dxc:AxisY2D.VisualRange>
+                                <dxc:AxisY2D.CustomLabels>
+                                    <dxc:CustomAxisLabel Content="유량"/>
+                                </dxc:AxisY2D.CustomLabels>
+                                <dxc:AxisY2D.Title>
+                                    <dxc:AxisTitle Alignment="Center" Content="유량(㎥/h)"/>
+                                </dxc:AxisY2D.Title>
+                            
+                            </dxc:AxisY2D>
+                        </dxc:XYDiagram2D.AxisY>
+
+                        <dxc:XYDiagram2D.SecondaryAxesY>
+                            <dxc:SecondaryAxisY2D x:Name="axisYprs">
+                                <dxc:AxisY2D.VisualRange>
+                                    <dxc:Range MinValue="2.5" MaxValue="3.7"/>
+                                </dxc:AxisY2D.VisualRange>
+                                <dxc:SecondaryAxisY2D.Title>
+                                    <dxc:AxisTitle Alignment="Center" Content="수압(kgh/㎤)"/>
+                                </dxc:SecondaryAxisY2D.Title>
+                            </dxc:SecondaryAxisY2D>
+
+                            <dxc:SecondaryAxisY2D x:Name="axisYflsm">
+                                <dxc:AxisY2D.VisualRange>
+                                    <dxc:Range MinValue="1325000" MaxValue="1327000"/>
+                                </dxc:AxisY2D.VisualRange>
+                                <dxc:SecondaryAxisY2D.Title>
+                                    <dxc:AxisTitle Alignment="Center" Content="적산(㎥)"/>
+                                </dxc:SecondaryAxisY2D.Title>
+                            </dxc:SecondaryAxisY2D>
+
+                                <dxc:SecondaryAxisY2D x:Name="axisYflsmc">
+                                    <dxc:AxisY2D.VisualRange>
+                                        <dxc:Range MinValue="0" MaxValue="30"/>
+                                    </dxc:AxisY2D.VisualRange>
+                                    <dxc:SecondaryAxisY2D.Title>
+                                    <dxc:AxisTitle Alignment="Center" Content="적산차(㎥)"/>
+                                    </dxc:SecondaryAxisY2D.Title>
+                                </dxc:SecondaryAxisY2D>
+                            </dxc:XYDiagram2D.SecondaryAxesY>
+
+                        <dxc:XYDiagram2D.Series>
+                            <dxc:LineSeries2D DisplayName="유량" 
+                                              DataSource="{Binding ElementName=CC}" 
+                                              ArgumentScaleType="DateTime"
+                                              ArgumentDataMember="FL_TM"
+                                              ValueDataMember="FL_MESR"
+                                              CrosshairLabelPattern="{}{S:MMMM}: {V:f2}㎥/h"
+                                              MarkerVisible="False" 
+                                              AxisX="{Binding ElementName=axisXtm}" 
+                                              AxisY="{Binding ElementName=axisYfl}"
+                                              LabelsVisibility="False"
+                                              CheckableInLegend="True">
+                                <dxc:LineSeries2D.MarkerModel>
+                                    <dxc:BorderlessSimpleMarker2DModel/>
+                                </dxc:LineSeries2D.MarkerModel>
+                                <dxc:LineSeries2D.Label>
+                                    <dxc:SeriesLabel Visibility="Collapsed" Visible="False"/>
+                                </dxc:LineSeries2D.Label>
+                            </dxc:LineSeries2D>
+
+                            <dxc:LineSeries2D DisplayName="수압" 
+                                              DataSource="{Binding ElementName=CC}" 
+                                              ArgumentScaleType="DateTime"
+                                              ArgumentDataMember="FL_TM"
+                                              ValueDataMember="PRS_MESR"
+                                              CrosshairLabelPattern="{}{S:MMMM}: {V:f2}kgf/㎠"
+                                              MarkerVisible="False" 
+                                              AxisX="{Binding ElementName=axisXtm}" 
+                                              AxisY="{Binding ElementName=axisYprs}"
+                                              LabelsVisibility="False"
+                                              CheckableInLegend="True">
+                                <dxc:LineSeries2D.MarkerModel>
+                                    <dxc:BorderlessSimpleMarker2DModel/>
+                                </dxc:LineSeries2D.MarkerModel>
+                                <dxc:LineSeries2D.Label>
+                                    <dxc:SeriesLabel Visibility="Visible"  Visible="False"/>
+                                </dxc:LineSeries2D.Label>
+                            </dxc:LineSeries2D>
+
+                            <dxc:LineSeries2D DisplayName="적산" 
+                                              DataSource="{Binding ElementName=CC}" 
+                                              ArgumentScaleType="DateTime"
+                                              ArgumentDataMember="FL_TM"
+                                              ValueDataMember="FLSM_MESR"
+                                              CrosshairLabelPattern="{}{S:MMMM}: {V:f2}㎥"
+                                              MarkerVisible="False" 
+                                              AxisX="{Binding ElementName=axisXtm}" 
+                                              AxisY="{Binding ElementName=axisYflsm}"
+                                              LabelsVisibility="False"
+                                              CheckableInLegend="True">
+                                <dxc:LineSeries2D.MarkerModel>
+                                    <dxc:BorderlessSimpleMarker2DModel/>
+                                </dxc:LineSeries2D.MarkerModel>
+                                <dxc:LineSeries2D.Label>
+                                    <dxc:SeriesLabel Visibility="Collapsed" Visible="False"/>
+                                </dxc:LineSeries2D.Label>
+                            </dxc:LineSeries2D>
+
+                            <dxc:LineSeries2D DisplayName="적산차" 
+                                              DataSource="{Binding ElementName=CC}" 
+                                              ArgumentScaleType="DateTime"
+                                              ArgumentDataMember="FL_TM"
+                                              ValueDataMember="FLSMC_MESR"
+                                              CrosshairLabelPattern="{}{S:MMMM}: {V:f2}㎥"
+                                              MarkerVisible="False" 
+                                              AxisX="{Binding ElementName=axisXtm}" 
+                                              AxisY="{Binding ElementName=axisYflsmc}"
+                                              LabelsVisibility="False"
+                                              CheckableInLegend="True" >
+                                <dxc:LineSeries2D.MarkerModel>
+                                    <dxc:BorderlessSimpleMarker2DModel/>
+                                </dxc:LineSeries2D.MarkerModel>
+                                <dxc:LineSeries2D.Label>
+                                    <dxc:SeriesLabel Visibility="Collapsed"  Visible="False"/>
+                                </dxc:LineSeries2D.Label>
+                            </dxc:LineSeries2D>
+
+                        </dxc:XYDiagram2D.Series>
+                    </dxc:XYDiagram2D>
+                </dxc:ChartControl.Diagram>
+                
+              
+                
+            </dxc:ChartControl>
+        </Border>
+
+
+
+
+
+        <!--그리드컨트롤 영역-->
+        <Button x:Name="btngriddata" Content="Detail Data" Grid.Row="4" Grid.Column="1" Width="100" HorizontalAlignment="Right" />
+
+        <Border Grid.Row="5" Grid.Column="1" >
+
+
+
+
+
+            <dxg:GridControl x:Name="datagrid" >
+
+                <dxg:GridControl.View>
+                    <dxg:TableView AutoWidth="True" ShowColumnHeaders="False" />
+                    
+
+                </dxg:GridControl.View>
+            
+            <dxg:GridControl.Bands>
+                    
+
+                    <dxg:GridControlBand Header="FL_TM" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn FieldName="FL_TM" Width="100*">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings VerticalContentAlignment="Center" HorizontalContentAlignment="Center" DisplayFormat="dd일 hh시 mm분경"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                            </dxg:GridControlBand>
+                  
+                    <dxg:GridControlBand Header="유량" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridControlBand.Bands>
+                            <dxg:GridControlBand Header="FL_계측값" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn FieldName="FL_MESR" Width="100*">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                            </dxg:GridControlBand>
+                            <dxg:GridControlBand Header="FL_보정값" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn FieldName="FL_MODI" Width="100*">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                            </dxg:GridControlBand>
+                        </dxg:GridControlBand.Bands>
+                    </dxg:GridControlBand>
+
+                    <dxg:GridControlBand Header="수압" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridControlBand.Bands>
+                            <dxg:GridControlBand Header="PRS_계측값" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn FieldName="PRS_MESR" Width="100*" >
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings VerticalContentAlignment="Center" HorizontalContentAlignment="Center" DisplayFormat="0.##"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                            </dxg:GridControlBand>
+                            <dxg:GridControlBand Header="PRS_보정값" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn FieldName="PRS_MODI" Width="100*">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings VerticalContentAlignment="Center" HorizontalContentAlignment="Center" DisplayFormat="0.##"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                            </dxg:GridControlBand>
+                        </dxg:GridControlBand.Bands>
+                    </dxg:GridControlBand>
+
+                    <dxg:GridControlBand Header="적산" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridControlBand.Bands>
+                            <dxg:GridControlBand Header="FLSM_계측값" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn FieldName="FLSM_MESR" Width="100*">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                            </dxg:GridControlBand>
+                            <dxg:GridControlBand Header="FLSM_보정값" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn FieldName="FLSM_MODI" Width="100*">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                            </dxg:GridControlBand>
+                        </dxg:GridControlBand.Bands>
+                    </dxg:GridControlBand>
+
+                    <dxg:GridControlBand Header="적산차" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridControlBand.Bands>
+                            <dxg:GridControlBand Header="FLSMC_계측값" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn FieldName="FLSMC_MESR" Width="100*">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                            </dxg:GridControlBand>
+                            <dxg:GridControlBand Header="FLSMC_보정값" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn FieldName="FLSMC_MODI" Width="100*">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                            </dxg:GridControlBand>
+                        </dxg:GridControlBand.Bands>
+                    </dxg:GridControlBand>
+                </dxg:GridControl.Bands>
+            </dxg:GridControl>
+
+
+
+        </Border>
+
+    </Grid>
+</Window>
